@@ -17,7 +17,7 @@ def main():
     jeu_actif = True
 
     while jeu_actif:
-        print("\n" + "="*40)
+        print("\n" + "="*71)
         afficher_etat(entreprise)  # affichage initial de la semaine
         semaine_active = True
 

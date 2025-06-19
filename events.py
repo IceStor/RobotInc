@@ -8,12 +8,21 @@ def evenement_mensuel(entreprise):
     entreprise.mise_a_jour_effets()
 
     evenements_possibles = [
-        {"type": "prix_temp", "texte": f"📈 Hausse temporaire du coût des matières premières : " f"{entreprise.prix_mp_base} => {entreprise.prix_mp_base + (entreprise.prix_mp_base * 4)}!",
-         "valeur": entreprise.prix_mp_base * 4, "duree": 4},
-        {"type": "prix_def", "texte": "📈 Inflation permanente du coût des matières premières : " f"{entreprise.prix_mp_base} => {entreprise.prix_mp_base * 2}!",
-         "valeur": entreprise.prix_mp_base * 2},
-        {"type": "bonus", "texte": "💼 Subvention gouvernementale ! +500€", "gain": 500},
-        {"type": "neutre", "texte": "🌤️ Mois calme, aucun changement."},
+        {"type":
+            "prix_temp",
+            "texte": f"📈 Hausse temporaire du coût des matières premières : " f"{entreprise.prix_mp_base} => {entreprise.prix_mp_base + (entreprise.prix_mp_base * 4)}!",
+            "valeur": entreprise.prix_mp_base * 4, "duree": 4},
+        {"type":
+            "prix_def",
+            "texte": "📈 Inflation permanente du coût des matières premières : " f"{entreprise.prix_mp_base} => {entreprise.prix_mp_base * 2}!",
+            "valeur": entreprise.prix_mp_base * 2},
+        {"type":
+            "bonus",
+            "texte": "💼 Subvention gouvernementale ! +500€",
+            "gain": 500},
+        {"type":
+            "neutre",
+            "texte": "🌤️ Mois calme, aucun changement."},
     ]
 
     evenement = random.choice(evenements_possibles)

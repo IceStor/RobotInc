@@ -1,7 +1,7 @@
 # utils.py
 
 def afficher_etat(entreprise):
-    print(f"\n📅 Semaine {entreprise.semaine}")
+    print(f" " * 30 + f"📅Semaine {entreprise.semaine}")
     print(f"💰 Argent : {entreprise.argent}€")
     print(f"📦 Stock - MP : {entreprise.stock['matiere_premiere']}, Robots : {entreprise.stock['robots']} / Max : {entreprise.stock_max}")
     print(f"🧠 Place utilisée : {entreprise.espace_utilise()} / {entreprise.stock_max} | Place libre : {entreprise.espace_disponible()}")

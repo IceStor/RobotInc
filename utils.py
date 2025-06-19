@@ -7,10 +7,20 @@ def afficher_etat(entreprise):
     print(f"🧠 Place utilisée : {entreprise.espace_utilise()} / {entreprise.stock_max} | Place libre : {entreprise.espace_disponible()}")
     print(f"👷 Ouvriers : {entreprise.ouvriers} | 👨‍🔬 Ingénieurs : {entreprise.ingenieurs}")
     print(f"🔮 Production théorique (prochaine semaine) : {production_theorique(entreprise)} robots")
+    if entreprise.effets_temporaire:
+        print("\n🌀 Effets temporaires actifs :")
+        for effet in entreprise.effets_temporaire:
+            print(f"  - {effet.description(entreprise)}")
+
 
 def production_theorique(entreprise):
-    capacite = entreprise.capacite_production()
-    matieres_dispo = entreprise.stock["matiere_premiere"]
-    robots_max = matieres_dispo * 10
-    production_possible = min(capacite, robots_max, entreprise.espace_disponible())
-    return production_possible
+    ouvriers = entreprise.ouvriers
+    mp_dispo = entreprise.stock["matiere_premiere"]
+    espace_dispo = entreprise.espace_disponible()
+
+    max_ouvriers_utilisables = min(ouvriers, mp_dispo)
+    max_robot_possible = max_ouvriers_utilisables * 5
+    max_robot_place = min(max_robot_possible, espace_dispo)
+
+    return max_robot_place
+

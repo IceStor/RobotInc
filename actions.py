@@ -1,8 +1,9 @@
 # actions.py
 
-def acheter_matieres_premieres(entreprise, quantite, prix_unitaire=10):
+def acheter_matieres_premieres(entreprise, quantite):
+    prix_unitaire = entreprise.prix_actuel_mp()
     cout_total = quantite * prix_unitaire
-    espace_requis = quantite * 5  # 1 MP = 5 unités de stockage
+    espace_requis = quantite * 5
 
     if cout_total > entreprise.argent:
         print("💸 Pas assez d'argent.")
@@ -13,24 +14,26 @@ def acheter_matieres_premieres(entreprise, quantite, prix_unitaire=10):
 
     entreprise.argent -= cout_total
     entreprise.stock["matiere_premiere"] += quantite
-    print(f"✅ Acheté {quantite} MP pour {cout_total}€, utilisé {espace_requis} de stockage.")
+    print(f"✅ Acheté {quantite} MP pour {cout_total}€ ({prix_unitaire}€/u), utilisé {espace_requis} d’espace.")
+
+
+# actions.py
 
 def production_hebdomadaire(entreprise):
-    capacite = entreprise.capacite_production()
-    matieres_dispo = entreprise.stock["matiere_premiere"]
-    robots_max = matieres_dispo * 10  # chaque MP permet de produire 10 robots
-    production_possible = min(capacite, robots_max)
+    ouvriers = entreprise.ouvriers
+    mp_dispo = entreprise.stock["matiere_premiere"]
+    espace_dispo = entreprise.espace_disponible()
 
-    matieres_necessaires = (production_possible + 9) // 10  # arrondi haut
-    espace_necessaire = production_possible  # 1 robot = 1 espace
+    max_ouvriers_utilisables = min(ouvriers, mp_dispo)
+    max_robot_possible = max_ouvriers_utilisables * 5
+    max_robot_place = min(max_robot_possible, espace_dispo)
 
-    if entreprise.espace_disponible() < espace_necessaire:
-        production_possible = entreprise.espace_disponible()
-        matieres_necessaires = (production_possible + 9) // 10
+    robot_produits = max_robot_place
+    mp_consomme = (robot_produits // 5)
 
-    if production_possible > 0 and entreprise.stock["matiere_premiere"] >= matieres_necessaires:
-        entreprise.stock["matiere_premiere"] -= matieres_necessaires
-        entreprise.stock["robots"] += production_possible
-        print(f"🤖 Production automatique : {production_possible} robots produits.")
-    else:
-        print("⚠️ Pas assez de MP ou d’espace pour produire.")
+    entreprise.stock["robots"] += robot_produits
+    entreprise.stock["matiere_premiere"] -= mp_consomme
+
+    print(f"🤖 Production automatique : {robot_produits} robots produits.")
+
+

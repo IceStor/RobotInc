@@ -47,6 +47,7 @@ def main():
             elif choix == "2":
                 production_hebdomadaire(entreprise)
                 entreprise.semaine += 1
+                entreprise.payer_salaires()
                 if entreprise.semaine % 4 == 0:
                     evenement_mensuel(entreprise)
                 semaine_active = False  # on sort de la boucle interne

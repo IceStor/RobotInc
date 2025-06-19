@@ -11,10 +11,14 @@ class Entreprise:
         }
         self.ouvriers = 2
         self.ingenieurs = 1
+        self.salaire_ouvrier = 100
+        self.salaire_ingenieur = 200
+
         self.recherches = []
         self.recherches_en_cours = []
         self.contrats = []
         self.effets_temporaire = []
+
 
         # 🔄 Prix dynamique des matières premières
         self.prix_mp_base = 100
@@ -49,6 +53,15 @@ class Entreprise:
         for effet in effets_fin:
             print(f"🛑 Fin de l'effet temporaire : {effet.nom}")
             self.effets_temporaire.remove(effet)
+
+    def payer_salaires(self):
+        total = self.ouvriers * self.salaire_ouvrier + self.ingenieurs * self.salaire_ingenieur
+        if self.argent >= total:
+            self.argent -= total
+            print(f"💸 Paiement des salaires : -{total}€ ({self.ouvriers} ouvriers, {self.ingenieurs} ingénieurs)")
+        else:
+            print(f"⚠️ Fonds insuffisants pour payer les salaires ({total}€ requis).")
+            # Plus tard : logique de pénalité, licenciement, etc.
 
 
 class EffetTemporaire:

@@ -5,9 +5,10 @@ def acheter_matieres_premieres(entreprise, quantite):
     cout_total = quantite * prix_unitaire
     espace_requis = quantite * 5
 
-    if cout_total > entreprise.argent:
-        print("💸 Pas assez d'argent.")
+    if entreprise.argent - cout_total < entreprise.decouvert_max:
+        print(f"💸 Achat refusé : cela dépasserait le découvert autorisé ({entreprise.decouvert_max}€).")
         return
+
     if entreprise.espace_disponible() < espace_requis:
         print("📦 Pas assez d’espace dans le stock.")
         return
@@ -16,8 +17,6 @@ def acheter_matieres_premieres(entreprise, quantite):
     entreprise.stock["matiere_premiere"] += quantite
     print(f"✅ Acheté {quantite} MP pour {cout_total}€ ({prix_unitaire}€/u), utilisé {espace_requis} d’espace.")
 
-
-# actions.py
 
 def production_hebdomadaire(entreprise):
     ouvriers = entreprise.ouvriers

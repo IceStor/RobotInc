@@ -17,7 +17,9 @@ def main():
     jeu_actif = True
 
     while jeu_actif:
-        print("\n" + "="*71)
+        print("="*71)
+        entreprise.verifier_sauvetage_ou_fail()
+
         afficher_etat(entreprise)  # affichage initial de la semaine
         semaine_active = True
 
@@ -45,6 +47,7 @@ def main():
                     print("⛔ Entrée invalide.")
 
             elif choix == "2":
+                print('\n\n\n')
                 production_hebdomadaire(entreprise)
                 entreprise.semaine += 1
                 entreprise.payer_salaires()

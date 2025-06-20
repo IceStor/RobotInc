@@ -16,10 +16,10 @@ def evenement_mensuel(entreprise):
             "prix_def",
             "texte": "📈 Inflation permanente du coût des matières premières : " f"{entreprise.prix_mp_base} => {entreprise.prix_mp_base * 2}!",
             "valeur": entreprise.prix_mp_base * 2},
-        {"type":
-            "bonus",
-            "texte": "💼 Subvention gouvernementale ! +500€",
-            "gain": 500},
+        # {"type":
+        #     "bonus",
+        #     "texte": "💼 Subvention gouvernementale ! +500€",
+        #     "gain": 500},
         {"type":
             "neutre",
             "texte": "🌤️ Mois calme, aucun changement."},

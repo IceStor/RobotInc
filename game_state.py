@@ -1,7 +1,7 @@
 import random
 import math
 
-from contracts import generer_contrats_mensuels
+from contracts import generer_contrats_mensuels, NOMBRE_MAX_CONTRATS
 
 
 class Entreprise:
@@ -36,7 +36,7 @@ class Entreprise:
 
 
         #Contrat
-        self.contrats_disponibles = generer_contrats_mensuels()
+        self.contrats_disponibles = generer_contrats_mensuels(NOMBRE_MAX_CONTRATS)
         self.contrats_actifs = []
         self.contrats_a_livrer = []
 
@@ -151,6 +151,7 @@ class Entreprise:
         else:
             print("⚠️ Contrat déjà sélectionné.")
 
+
     def mise_a_jour_contrats(self):
         # ✅ Gérer les contrats sélectionnés
         contrats_restants = []
@@ -174,7 +175,12 @@ class Entreprise:
         # ✅ Mise à jour mensuelle des contrats disponibles
         if self.semaine % 4 == 0:
             print("🔁 Rafraîchissement des contrats disponibles.")
-            self.contrats_disponibles = generer_contrats_mensuels()
+            nb_actifs = len(self.contrats_actifs)
+            nb_a_generer = NOMBRE_MAX_CONTRATS - nb_actifs
+            self.contrats_disponibles = generer_contrats_mensuels(nb_a_generer)
+
+
+
 
 
 class EffetTemporaire:

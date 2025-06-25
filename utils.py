@@ -11,6 +11,13 @@ def afficher_etat(entreprise):
     if semaines < 4:
         print(f"💥 Trésorerie critique : vous pouvez payer {semaines} semaine(s) de salaire(s).")
 
+    if entreprise.contrats_actifs:
+        print("\n📌 Contrats en cours :")
+        if entreprise.contrats_actifs:
+            for i, contrat in enumerate(entreprise.contrats_actifs):
+                print(contrat.afficher(i))
+
+
     if entreprise.effets_temporaire:
         print("\n🌀 Effets temporaires actifs :")
         for effet in entreprise.effets_temporaire:
@@ -29,16 +36,24 @@ def production_theorique(entreprise):
     return max_robot_place
 
 
-
 def afficher_contrats(entreprise):
     print("📋 Contrats disponibles ce mois-ci :")
+    mapping = {}
+    display_index = 1
     for i, contrat in enumerate(entreprise.contrats_disponibles):
         if not contrat.selectionne:
-            print(contrat.afficher(i))
+            print(f"{display_index}. {contrat.afficher()}")  # sans passer l'index
+            mapping[display_index] = i  # mapping affiché → index réel
+            display_index += 1
+
     print("\n📌 Contrats en cours :")
-    for contrat in entreprise.contrats_actifs:
-        status = f"🕒 Reste {contrat.delai_restant} sem."
-        print(f"- {contrat.nom_client} | Robots : {contrat.nb_robots} | {status}")
+    if not entreprise.contrats_actifs:
+        print("⏳ Aucun contrat en cours.")
+    else:
+        for i, contrat in enumerate(entreprise.contrats_actifs):
+             print(contrat.afficher(i))
+    return mapping
+
 
 
 

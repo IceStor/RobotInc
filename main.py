@@ -65,6 +65,23 @@ def main():
                 print('\n\n\n')
                 afficher_contrats(entreprise)
 
+                contrats_dispo = [
+                    c for c in entreprise.contrats_disponibles if not c.selectionne
+                ]
+                if contrats_dispo:
+                    reponse = input("📌 Souhaitez-vous sélectionner un contrat ? (o/n) : ").lower()
+                    if reponse == "o":
+                        try:
+                            index = int(input(f"🔢 Numéro du contrat à sélectionner (1 à {len(contrats_dispo)}) : ")) - 1
+                            index_reel = [
+                                i for i, c in enumerate(entreprise.contrats_disponibles) if not c.selectionne
+                            ][index]
+                            entreprise.selectionner_contrat(index_reel)
+                        except (ValueError, IndexError):
+                            print("⛔ Numéro invalide.")
+                else:
+                    print("📭 Aucun contrat disponible à sélectionner.")
+
 
             else:
                 print("⛔ Choix invalide.")

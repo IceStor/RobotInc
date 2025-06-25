@@ -14,10 +14,8 @@ SITES_PAR_CLIENT = {
 GAMMES_DISPONIBLES = ["V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9", "V10"]
 SEMAINE_TRANSITION_MARCHE = 20  # semaine à laquelle la transition commence
 DUREE_TRANSITION_MARCHE = 10    # durée pendant laquelle la transition a lieu
+NOMBRE_MAX_CONTRATS = 3
 
-import random
-
-NOMS_CLIENTS = ["Robotech", "MecaCorp", "InnovaBot", "CyberDyn", "AlphaSystems"]
 
 class Contrat:
     def __init__(self, nom_client, nb_robots, delai, budget, prix):
@@ -32,18 +30,31 @@ class Contrat:
         self.livre = False
         self.expire = False
 
+
     def afficher(self, index=None):
         prefix = f"{index + 1}. " if index is not None else ""
-        statut = "✅ Sélectionné" if self.selectionne else "🆕 Disponible"
+
+        # Déterminer le statut du contrat
+        if self.expire:
+            statut = "❌ Expiré"
+        elif self.livre:
+            statut = "📦 En livraison"
+        elif self.selectionne and self.acompte_verse:
+            statut = "💰 Acompte versé"
+        elif self.selectionne:
+            statut = "✅ Sélectionné"
+        else:
+            statut = "🆕 Disponible"
+
         return (
             f"{prefix}📦 Client : {self.nom_client} | Robots : {self.nb_robots} | "
             f"Délais : {self.delai} sem. | Prix : {self.prix}€ / Budget : {self.budget}€ [{statut}]"
         )
 
-def generer_contrats_mensuels():
+
+def generer_contrats_mensuels(nombre):
     contrats = []
-    for _ in range(3):
-        print(_)
+    for _ in range(nombre):
         nom = random.choice(NOMS_CLIENTS)
         # Robots demandés : multiple de 5 entre 20 et 50
         nb_robots = random.choice([i for i in range(20, 51, 5)])

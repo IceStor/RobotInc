@@ -1,15 +1,18 @@
 # main.py
 
 from game_state import Entreprise
+from contracts import generer_contrats_mensuels
 from actions import acheter_matieres_premieres, production_hebdomadaire
 from events import evenement_mensuel
-from utils import afficher_etat
+from utils import afficher_etat, afficher_contrats
 
 
 def afficher_menu():
     print("\n🧭 Que voulez-vous faire ?")
     print("1. Acheter matières premières")
     print("2. Finir la semaine")
+    print("3. Voir contrats disponibles")
+    print("4. Livrer un contrat")
     return input("Votre choix : ")
 
 def main():
@@ -19,7 +22,6 @@ def main():
     while jeu_actif:
         print("="*71)
         entreprise.verifier_sauvetage_ou_fail()
-
         afficher_etat(entreprise)  # affichage initial de la semaine
         semaine_active = True
 
@@ -52,10 +54,16 @@ def main():
                 entreprise.semaine += 1
                 entreprise.payer_salaires()
                 if entreprise.semaine % 4 == 0:
+                    entreprise.mise_a_jour_contrats()
                     evenement_mensuel(entreprise)
+
                 semaine_active = False  # on sort de la boucle interne
 
                 entreprise.mise_a_jour_effets()  # <-- Important : ici
+
+            elif choix == "3":
+                print('\n\n\n')
+                afficher_contrats(entreprise)
 
 
             else:

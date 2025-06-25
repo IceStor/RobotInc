@@ -28,3 +28,32 @@ def production_theorique(entreprise):
 
     return max_robot_place
 
+
+
+def afficher_contrats(entreprise):
+    print("📋 Contrats disponibles ce mois-ci :")
+    for i, contrat in enumerate(entreprise.contrats_disponibles):
+        if not contrat.selectionne:
+            print(contrat.afficher(i))
+    print("\n📌 Contrats en cours :")
+    for contrat in entreprise.contrats_actifs:
+        status = f"🕒 Reste {contrat.delai_restant} sem."
+        print(f"- {contrat.nom_client} | Robots : {contrat.nb_robots} | {status}")
+
+
+
+
+def tenter_livraison(entreprise):
+    livrables = [c for c in entreprise.contrats_actifs if not c.livre and entreprise.stock["robots"] >= c.nb_robots]
+    if not livrables:
+        print("❌ Aucun contrat livrable.")
+        return
+    for i, c in enumerate(livrables):
+        print(f"{i+1}. {c.nom_client} | Robots : {c.nb_robots}")
+    choix = int(input("📦 Choisissez un contrat à livrer : ")) - 1
+    contrat = livrables[choix]
+    entreprise.stock["robots"] -= contrat.nb_robots
+    entreprise.contrats_a_livrer.append(contrat)
+    contrat.livre = True
+    print(f"🚚 Livraison prévue semaine prochaine pour {contrat.nom_client}.")
+

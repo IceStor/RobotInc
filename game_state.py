@@ -1,12 +1,13 @@
 import random
 import math
 
-# game_state.py
+from contracts import generer_contrats_mensuels
+
 
 class Entreprise:
     def __init__(self):
         self.semaine = 1
-        self.argent = 1000
+        self.argent = 10000
         self.stock_max = 100
         self.stock = {
             "matiere_premiere": 10,
@@ -14,8 +15,8 @@ class Entreprise:
         }
         self.ouvriers = 2
         self.ingenieurs = 1
-        self.salaire_ouvrier = 500
-        self.salaire_ingenieur = 500
+        self.salaire_ouvrier = 100
+        self.salaire_ingenieur = 200
 
         self.recherches = []
         self.recherches_en_cours = []
@@ -31,6 +32,14 @@ class Entreprise:
         self.sauvetage_seuil = self.decouvert_max * 0.25  # Exemple : -1250 si max = -5000
         self.sauvetage_montant = 1000
         self.en_danger = False  # Indique qu'on a dépassé le découvert max ce tour-ci
+        self.sauvetages_actionnaires_restants = 3
+
+
+        #Contrat
+        self.contrats_disponibles = generer_contrats_mensuels()
+        self.contrats_actifs = []
+        self.contrats_a_livrer = []
+
 
     def capacite_production(self):
         return self.ouvriers * 5
@@ -73,11 +82,13 @@ class Entreprise:
         if semaines <= 2 and self.ouvriers + self.ingenieurs > 0:
             self.proposer_licenciement()
 
+
     def semaines_solvables(self):
         salaire_total = self.ouvriers * self.salaire_ouvrier + self.ingenieurs * self.salaire_ingenieur
         if salaire_total == 0:
             return float("inf")  # aucun salarié, donc solvable indéfiniment
         return self.argent // salaire_total
+
 
     def proposer_licenciement(self):
         total_employes = self.ouvriers + self.ingenieurs
@@ -125,6 +136,45 @@ class Entreprise:
                     "⚠️ Dépassement du découvert autorisé ! Vous devez remonter la trésorerie avant la fin du prochain tour.")
         else:
             self.en_danger = False  # On est remonté au-dessus, on réinitialise le risque
+
+
+
+    def selectionner_contrat(self, index):
+        contrat = self.contrats_disponibles[index]
+        if not contrat.selectionne:
+            contrat.selectionne = True
+            self.contrats_actifs.append(contrat)
+            acompte = int(contrat.prix * 0.25)
+            self.argent += acompte
+            contrat.acompte_verse = True
+            print(f"✅ Contrat sélectionné. Acompte de {acompte}€ versé.")
+        else:
+            print("⚠️ Contrat déjà sélectionné.")
+
+    def mise_a_jour_contrats(self):
+        # ✅ Gérer les contrats sélectionnés
+        contrats_restants = []
+        for contrat in self.contrats_actifs:
+            if contrat.livre:
+                self.argent += contrat.prix - int(contrat.prix * 0.25)
+                print(f"📦 Livraison terminée ! Contrat {contrat.nom_client} complété pour {contrat.prix}€.")
+            elif contrat.delai_restant <= 0:
+                print(f"⏳ Contrat expiré : {contrat.nom_client}")
+                if contrat.acompte_verse:
+                    retrait = int(contrat.prix * 0.25)
+                    self.argent -= retrait
+                    print(f"💸 Acompte remboursé : -{retrait}€")
+                contrat.expire = True
+            else:
+                contrat.delai_restant -= 1
+                contrats_restants.append(contrat)
+
+        self.contrats_actifs = contrats_restants
+
+        # ✅ Mise à jour mensuelle des contrats disponibles
+        if self.semaine % 4 == 0:
+            print("🔁 Rafraîchissement des contrats disponibles.")
+            self.contrats_disponibles = generer_contrats_mensuels()
 
 
 class EffetTemporaire:
